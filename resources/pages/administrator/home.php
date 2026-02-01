@@ -12,6 +12,21 @@
 </head>
 
 <body>
+    <?php include 'includes/topbar.php'; ?>
+    <section class="main">
+        <?php include 'includes/sidebar.php'; ?>
+        <div class="main--content">
+            <div class="overview">
+                <div class="title">
+                    <h2 class="section--title">Overview</h2>
+                    <select name="date" id="date" class="dropdown">
+                        <option value="today">Today</option>
+                        <option value="lastweek">Last Week</option>
+                        <option value="lastmonth">Last Month</option>
+                        <option value="lastyear">Last Year</option>
+                        <option value="alltime">All Time</option>
+                    </select>
+                </div>
 
 </body>
 
