@@ -27,6 +27,30 @@
                         <option value="alltime">All Time</option>
                     </select>
                 </div>
+                <div class="cards">
+                    <div class="card card-1">
+
+                        <div class="card--data">
+                            <div class="card--content">
+                                <h5 class="card--title">Registered Students</h5>
+                                <h1><?php total_rows('tblstudents') ?></h1>
+                            </div>
+                            <i class="ri-user-2-line card--icon--lg"></i>
+                        </div>
+
+                    </div>
+                    <div class="card card-1">
+
+                        <div class="card--data">
+                            <div class="card--content">
+                                <h5 class="card--title">Units</h5>
+                                <h1><?php total_rows("tblunit") ?></h1>
+                            </div>
+                            <i class="ri-file-text-line card--icon--lg"></i>
+                        </div>
+
+                    </div>
+
 
 </body>
 
