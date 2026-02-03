@@ -50,6 +50,57 @@
                         </div>
 
                     </div>
+                    </div>
+            </div>
+
+            <div class="table-container">
+                <a href="manage-lecture" style="text-decoration:none;">
+                    <div class="title">
+                        <h2 class="section--title">Lectures</h2>
+                        <button class="add"><i class="ri-add-line"></i>Add lecture</button>
+                    </div>
+                </a>
+                <div class="table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email Address</th>
+                                <th>Phone No</th>
+                                <th>Faculty</th>
+                                <th>Date Registered</th>
+                                <th>Settings</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <?php
+                                $sql = "SELECT l.*, f.facultyName
+                         FROM tbllecture l
+                         LEFT JOIN tblfaculty f ON l.facultyCode = f.facultyCode";
+
+                                $stmt = $pdo->query($sql);
+                                $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                                if ($result) {
+                                    foreach ($result as $row) {
+                                        echo "<tr id='rowlecture{$row["Id"]}'>";
+                                        echo "<td>" . $row["firstName"] . "</td>";
+                                        echo "<td>" . $row["emailAddress"] . "</td>";
+                                        echo "<td>" . $row["phoneNo"] . "</td>";
+                                        echo "<td>" . $row["facultyName"] . "</td>";
+                                        echo "<td>" . $row["dateCreated"] . "</td>";
+                                        echo "<td><span><i class='ri-delete-bin-line delete' data-id='{$row["Id"]}' data-name='lecture'></i></span></td>";
+                                        echo "</tr>";
+                                    }
+                                } else {
+                                    echo "<tr><td colspan='6'>No records found</td></tr>";
+                                }
+                                ?>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
 
 
 </body>
