@@ -101,6 +101,51 @@
                     </table>
                 </div>
             </div>
+            <div class="table-container">
+                <a href="manage-students" style="text-decoration:none;">
+                    <div class="title">
+                        <h2 class="section--title">Students</h2>
+                        <button class="add"><i class="ri-add-line"></i>Add Student</button>
+                    </div>
+                </a>
+                <div class="table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Registration No</th>
+                                <th>Name</th>
+                                <th>Faculty</th>
+                                <th>Course</th>
+                                <th>Email</th>
+                                <th>Settings</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                            $sql = "SELECT * FROM tblstudents";
+                            $stmt = $pdo->query($sql);
+                            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                            if ($result) {
+                                foreach ($result as $row) {
+                                    echo "<tr id='rowstudents{$row["Id"]}'>";
+                                    echo "<td>" . $row["registrationNumber"] . "</td>";
+                                    echo "<td>" . $row["firstName"] . "</td>";
+                                    echo "<td>" . $row["faculty"] . "</td>";
+                                    echo "<td>" . $row["courseCode"] . "</td>";
+                                    echo "<td>" . $row["email"] . "</td>";
+                                    echo "<td><span><i class='ri-delete-bin-line delete' data-id='{$row["Id"]}' data-name='students'></i></span></td>";
+                                    echo "</tr>";
+                                }
+                            } else {
+                                echo "<tr><td colspan='6'>No records found</td></tr>";
+                            }
+
+                            ?>
+
+                        </tbody>
+                    </table>
+                </div>
+
 
 
 </body>
