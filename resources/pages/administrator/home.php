@@ -190,6 +190,67 @@
                     </table>
                 </div>
 
+             </div>
+            <div class="table-container">
+                <a href="manage-course" style="text-decoration:none;">
+                    <div class="title">
+                        <h2 class="section--title">Courses</h2>
+                        <button class="add"><i class="ri-add-line"></i>Add Course</button>
+                    </div>
+                </a>
+                <div class="table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Faculty</th>
+                                <th>Total Units</th>
+                                <th>Total Students</th>
+                                <th>Date Created</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                            $sql = "SELECT 
+                        c.name AS course_name,c.Id AS Id,
+                        c.facultyID AS faculty,
+                        f.facultyName AS faculty_name,
+                        COUNT(u.ID) AS total_units,
+                        COUNT(DISTINCT s.Id) AS total_students,
+                        c.dateCreated AS date_created
+                        FROM tblcourse c
+                        LEFT JOIN tblunit u ON c.ID = u.courseID
+                        LEFT JOIN tblstudents s ON c.courseCode = s.courseCode
+                        LEFT JOIN tblfaculty f on c.facultyID=f.Id
+                        GROUP BY c.ID";
+                            $stmt = $pdo->query($sql);
+                            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                            if ($result) {
+                                foreach ($result as $row) {
+                                    echo "<tr id='rowcourse{$row["Id"]}'>";
+                                    echo "<td>" . $row["course_name"] . "</td>";
+                                    echo "<td>" . $row["faculty_name"] . "</td>";
+                                    echo "<td>" . $row["total_units"] . "</td>";
+                                    echo "<td>" . $row["total_students"] . "</td>";
+                                    echo "<td>" . $row["date_created"] . "</td>";
+                                    echo "<td><span><i class='ri-delete-bin-line delete' data-id='{$row["Id"]}' data-name='course'></i></span></td>";
+                                    echo "</tr>";
+                                }
+                            } else {
+                                echo "<tr><td colspan='6'>No records found</td></tr>";
+                            }
+
+                            ?>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <?php js_asset(["active_link", "delete_request"]) ?>
 
 
 </body>
