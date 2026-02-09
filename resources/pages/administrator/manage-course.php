@@ -28,5 +28,3 @@ if (isset($_POST["addCourse"])) {
     } else {
         $_SESSION['message'] = "Invalid input for course";
     }
-}
-
