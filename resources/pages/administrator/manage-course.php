@@ -29,4 +29,33 @@ if (isset($_POST["addCourse"])) {
         $_SESSION['message'] = "Invalid input for course";
     }
 }
+if (isset($_POST["addUnit"])) {
+    $unitName = htmlspecialchars(trim($_POST["unitName"]));
+    $unitCode = htmlspecialchars(trim($_POST["unitCode"]));
+    $courseID = filter_var($_POST["course"], FILTER_VALIDATE_INT);
+    $dateRegistered = date("Y-m-d");
+
+    if ($unitName && $unitCode && $courseID) {
+        $query = $pdo->prepare("SELECT * FROM tblunit WHERE unitCode = :unitCode");
+        $query->bindParam(':unitCode', $unitCode);
+        $query->execute();
+
+        if ($query->rowCount() > 0) {
+            $_SESSION['message'] = "Unit Already Exists";
+        } else {
+            $query = $pdo->prepare("INSERT INTO tblunit (name, unitCode, courseID, dateCreated) 
+                                     VALUES (:name, :unitCode, :courseID, :dateCreated)");
+            $query->bindParam(':name', $unitName);
+            $query->bindParam(':unitCode', $unitCode);
+            $query->bindParam(':courseID', $courseID);
+            $query->bindParam(':dateCreated', $dateRegistered);
+            $query->execute();
+
+            $_SESSION['message'] = "Unit Inserted Successfully";
+        }
+    } else {
+        $_SESSION['message'] = "Invalid input for unit";
+    }
+}
+
 
