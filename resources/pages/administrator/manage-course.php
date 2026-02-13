@@ -87,4 +87,32 @@ if (isset($_POST["addUnit"])) {
     }
 }
 
+if (isset($_POST["addFaculty"])) {
+    $facultyName = htmlspecialchars(trim($_POST["facultyName"]));
+    $facultyCode = htmlspecialchars(trim($_POST["facultyCode"]));
+    $dateRegistered = date("Y-m-d");
+
+    if ($facultyName && $facultyCode) {
+        $query = $pdo->prepare("SELECT * FROM tblfaculty WHERE facultyCode = :facultyCode");
+        $query->bindParam(':facultyCode', $facultyCode);
+        $query->execute();
+
+        if ($query->rowCount() > 0) {
+            $_SESSION['message'] = "Faculty Already Exists";
+        } else {
+            $query = $pdo->prepare("INSERT INTO tblfaculty (facultyName, facultyCode, dateRegistered) 
+                                     VALUES (:facultyName, :facultyCode, :dateRegistered)");
+            $query->bindParam(':facultyName', $facultyName);
+            $query->bindParam(':facultyCode', $facultyCode);
+            $query->bindParam(':dateRegistered', $dateRegistered);
+            $query->execute();
+
+            $_SESSION['message'] = "Faculty Inserted Successfully";
+        }
+    } else {
+        $_SESSION['message'] = "Invalid input for faculty";
+    }
+}
+
+
 
