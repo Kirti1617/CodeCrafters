@@ -119,6 +119,43 @@ if (isset($_POST["addFaculty"])) {
                         <option value="alltime">All Time</option>
                     </select>
                 </div>
+                <div class="cards">
+                    <div id="addCourse" class="card card-1">
+
+                        <div class="card--data">
+                            <div class="card--content">
+                                <button class="add"><i class="ri-add-line"></i>Add Course</button>
+                                <h1><?php total_rows('tblcourse') ?> Courses</h1>
+                            </div>
+                            <i class="ri-user-2-line card--icon--lg"></i>
+                        </div>
+
+                    </div>
+                    <div class="card card-1" id="addUnit">
+
+                        <div class="card--data">
+                            <div class="card--content">
+                                <button class="add"><i class="ri-add-line"></i>Add Units</button>
+                                <h1><?php total_rows('tblunit') ?> Units</h1>
+                            </div>
+                            <i class="ri-file-text-line card--icon--lg"></i>
+                        </div>
+
+                    </div>
+
+                    <div class="card card-1" id="addFaculty">
+
+                        <div class="card--data">
+                            <div class="card--content">
+                                <button class="add"><i class="ri-add-line"></i>Add Faculty</button>
+                                <h1><?php total_rows("tblfaculty") ?> faculties </h1>
+                            </div>
+                            <i class="ri-user-line card--icon--lg"></i>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
 
 </body>
 
