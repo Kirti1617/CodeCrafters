@@ -213,6 +213,57 @@ if (isset($_POST["addFaculty"])) {
                     </table>
                 </div>
 
+            </div>
+            <div class="table-container">
+                <div class="title">
+                    <h2 class="section--title">Unit</h2>
+                </div>
+                </a>
+                <div class="table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Unit Code</th>
+                                <th>Name</th>
+                                <th>Course</th>
+                                <th>Total Student</th>
+                                <th>Date Created</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                            $sql = "SELECT 
+                            c.name AS course_name,
+                            u.unitCode AS unit_code,
+                            u.name AS unit_name, u.Id as Id,
+                            u.dateCreated AS date_created,
+                            COUNT(s.Id) AS total_students
+                            FROM tblunit u
+                            LEFT JOIN tblcourse c ON u.courseID = c.Id
+                            LEFT JOIN tblstudents s ON c.courseCode = s.courseCode
+                            GROUP BY u.Id";
+                            $result = fetch($sql);
+                            if ($result) {
+                                foreach ($result as $row) {
+                                    echo "<tr id='rowunit{$row["Id"]}' >";
+                                    echo "<td>" . $row["unit_code"] . "</td>";
+                                    echo "<td>" . $row["unit_name"] . "</td>";
+                                    echo "<td>" . $row["course_name"] . "</td>";
+                                    echo "<td>" . $row["total_students"] . "</td>";
+                                    echo "<td>" . $row["date_created"] . "</td>";
+                                    echo "<td><span><i class='ri-delete-bin-line delete' data-id='{$row["Id"]}' data-name='unit'></i></span></td>";
+                                    echo "</tr>";
+                                }
+                            } else {
+                                echo "<tr><td colspan='6'>No records found</td></tr>";
+                            }
+
+                            ?>
+                        </tbody>
+                    </table>
+                </div>
+
 </body>
 
 </html>
