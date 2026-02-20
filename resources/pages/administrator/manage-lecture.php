@@ -65,7 +65,58 @@ if (isset($_POST["addLecture"])) {
 </head>
 
 <body>
+<?php include "Includes/topbar.php"; ?>
 
+    <section class=main>
+
+        <?php include "Includes/sidebar.php"; ?>
+
+        <div class="main--content">
+            <div id="overlay"></div>
+            <?php showMessage() ?>
+            <div class="table-container">
+                <div class="title" id="showButton">
+                    <h2 class="section--title">Lectures</h2>
+                    <button class="add"><i class="ri-add-line"></i>Add lecture</button>
+                </div>
+                <div class="table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email Address</th>
+                                <th>Phone No</th>
+                                <th>Faculty</th>
+                                <th>Date Registered</th>
+                                <th>Settings</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <?php
+                                $sql = "SELECT * FROM tbllecture";
+                                $result = fetch($sql);
+                                if ($result) {
+                                    foreach ($result as $row) {
+                                        echo "<tr id='rowlecture{$row["Id"]}'>";
+                                        echo "<td>" . $row["firstName"] . "</td>";
+                                        echo "<td>" . $row["emailAddress"] . "</td>";
+                                        echo "<td>" . $row["phoneNo"] . "</td>";
+                                        echo "<td>" . $row["facultyCode"] . "</td>";
+                                        echo "<td>" . $row["dateCreated"] . "</td>";
+                                        echo "<td><span><i class='ri-delete-bin-line delete' data-id='{$row["Id"]}' data-name='lecture'></i></span></td>";
+                                        echo "</tr>";
+                                    }
+                                } else {
+                                    echo "<tr><td colspan='6'>No records found</td></tr>";
+                                }
+
+                                ?>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
 </body>
 
 </html>
