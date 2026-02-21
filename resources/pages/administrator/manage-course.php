@@ -264,6 +264,65 @@ if (isset($_POST["addFaculty"])) {
                     </table>
                 </div>
 
+            </div>
+            <div class="table-container">
+                <div class="title">
+                    <h2 class="section--title">Faculty</h2>
+                </div>
+                </a>
+                <div class="table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Code</th>
+                                <th>Name</th>
+                                <th>Total Courses</th>
+                                <th>Total Students</th>
+                                <th>Total Lectures</th>
+                                <th>Date Created</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                            $sql = "SELECT 
+                           f.facultyName AS faculty_name,
+                           f.facultyCode AS faculty_code,
+                           f.Id as Id,
+                           f.dateRegistered AS date_created,
+                           COUNT(DISTINCT c.Id) AS total_courses,
+                           COUNT(DISTINCT s.Id) AS total_students,
+                           COUNT(DISTINCT l.Id) AS total_lectures
+                       FROM tblfaculty f
+                       LEFT JOIN tblcourse c ON f.Id = c.facultyID
+                       LEFT JOIN tblstudents s ON f.facultyCode = s.faculty
+                       LEFT JOIN tbllecture l ON f.facultyCode = l.facultyCode
+                       GROUP BY f.Id";
+
+                            $result = fetch($sql);
+                            if ($result) {
+                                foreach ($result as $row) {
+                                    echo "<tr id='rowfaculty{$row["Id"]}'>";
+                                    echo "<td>" . $row["faculty_code"] . "</td>";
+                                    echo "<td>" . $row["faculty_name"] . "</td>";
+                                    echo "<td>" . $row["total_courses"] . "</td>";
+                                    echo "<td>" . $row["total_students"] . "</td>";
+                                    echo "<td>" . $row["total_lectures"] . "</td>";
+                                    echo "<td>" . $row["date_created"] . "</td>";
+                                    echo "<td><span><i class='ri-delete-bin-line delete' data-id='{$row["Id"]}' data-name='faculty'></i></span></td>";
+                                    echo "</tr>";
+                                }
+                            } else {
+                                echo "<tr><td colspan='6'>No records found</td></tr>";
+                            }
+
+                            ?>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+    
+
 </body>
 
 </html>
