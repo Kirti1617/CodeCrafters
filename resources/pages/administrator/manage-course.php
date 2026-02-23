@@ -321,6 +321,49 @@ if (isset($_POST["addFaculty"])) {
                 </div>
 
             </div>
+
+         </div>
+        <div class="formDiv" id="addCourseForm" style="display:none; ">
+
+            <form method="POST" action="" name="addCourse" enctype="multipart/form-data">
+                <div style="display:flex; justify-content:space-around;">
+                    <div class="form-title">
+                        <p>Add Course</p>
+                    </div>
+                    <div>
+                        <span class="close">&times;</span>
+                    </div>
+                </div>
+
+                <input type="text" name="courseName" placeholder="Course Name" required>
+                <input type="text" name="courseCode" placeholder="Course Code" required>
+
+
+                <select required name="faculty">
+                    <option value="" selected>Select Faculty</option>
+                    <?php
+                    $facultyNames = getFacultyNames();
+                    foreach ($facultyNames as $faculty) {
+                        echo '<option value="' . $faculty["Id"] . '">' . $faculty["facultyName"] . '</option>';
+                    }
+                    ?>
+                </select>
+
+                <input type="submit" class="submit" value="Save Course" name="addCourse">
+            </form>
+        </div>
+
+        <div class="formDiv" id="addUnitForm" style="display:none; ">
+            <form method="POST" action="" name="addUnit" enctype="multipart/form-data">
+                <div style="display:flex; justify-content:space-around;">
+                    <div class="form-title">
+                        <p>Add Unit</p>
+                    </div>
+                    <div>
+                        <span class="close">&times;</span>
+                    </div>
+                </div>
+
     
 
 </body>
