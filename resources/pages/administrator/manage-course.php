@@ -364,8 +364,53 @@ if (isset($_POST["addFaculty"])) {
                     </div>
                 </div>
 
-    
+                <input type="text" name="unitName" placeholder="Unit Name" required>
+                <input type="text" name="unitCode" placeholder="Unit Code" required>
 
+                <select required name="lecture">
+                    <option value="" selected>Assign Lecture</option>
+                    <?php
+                    $lectureNames = getLectureNames();
+                    foreach ($lectureNames as $lecture) {
+                        echo '<option value="' . $lecture["Id"] . '">' . $lecture["firstName"] . ' ' . $lecture["lastName"]  .  '</option>';
+                    }
+                    ?>
+                </select>
+                <select required name="course">
+                    <option value="" selected>Select Course</option>
+                    <?php
+                    $courseNames = getCourseNames();
+                    foreach ($courseNames as $course) {
+                        echo '<option value="' . $course["Id"] . '">' . $course["name"] . '</option>';
+                    }
+                    ?>
+                </select>
+
+                <input type="submit" class="submit" value="Save Unit" name="addUnit">
+            </form>
+        </div>
+
+        <div class="formDiv" id="addFacultyForm" style="display:none; ">
+            <form method="POST" action="" name="addFaculty" enctype="multipart/form-data">
+                <div style="display:flex; justify-content:space-around;">
+                    <div class="form-title">
+                        <p>Add Faculty</p>
+                    </div>
+                    <div>
+                        <span class="close">&times;</span>
+                    </div>
+                </div>
+                <input type="text" name="facultyName" placeholder="Faculty Name" required>
+                <input type="text" name="facultyCode" placeholder="Faculty Code" required>
+                <input type="submit" class="submit" value="Save Faculty" name="addFaculty">
+            </form>
+        </div>
+
+
+
+    </section>
+
+    <?php js_asset(["delete_request", "addCourse", "active_link"]) ?>
 </body>
 
 </html>
