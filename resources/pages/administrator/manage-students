@@ -28,3 +28,22 @@ if (isset($_POST['addStudent'])) {
             $imageFileNames[] = $fileName;
         }
     }
+
+    // Convert image file names to JSON
+    $imagesJson = json_encode($imageFileNames);
+
+    // Check for duplicate registration number
+    $checkQuery = $pdo->prepare("SELECT COUNT(*) FROM tblstudents WHERE registrationNumber = :registrationNumber");
+    $checkQuery->execute([':registrationNumber' => $registrationNumber]);
+    $count = $checkQuery->fetchColumn();
+
+    if ($count > 0) {
+        $_SESSION['message'] = "Student with the given Registration No: $registrationNumber already exists!";
+    } else {
+        // Insert new student with images stored as JSON
+        $insertQuery = $pdo->prepare("
+        INSERT INTO tblstudents 
+        (firstName, lastName, email, registrationNumber, faculty, courseCode, studentImage, dateRegistered) 
+        VALUES 
+        (:firstName, :lastName, :email, :registrationNumber, :faculty, :courseCode, :studentImage, :dateRegistered)
+    ");
