@@ -27,4 +27,5 @@ if (isset($_POST['addStudent'])) {
             file_put_contents("{$folderPath}{$labelName}", $imageData);
             $imageFileNames[] = $fileName;
         }
+
     }
