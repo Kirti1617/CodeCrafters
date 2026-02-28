@@ -264,6 +264,153 @@ if (isset($_POST["addFaculty"])) {
                     </table>
                 </div>
 
+            </div>
+            <div class="table-container">
+                <div class="title">
+                    <h2 class="section--title">Faculty</h2>
+                </div>
+                </a>
+                <div class="table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Code</th>
+                                <th>Name</th>
+                                <th>Total Courses</th>
+                                <th>Total Students</th>
+                                <th>Total Lectures</th>
+                                <th>Date Created</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                            $sql = "SELECT 
+                           f.facultyName AS faculty_name,
+                           f.facultyCode AS faculty_code,
+                           f.Id as Id,
+                           f.dateRegistered AS date_created,
+                           COUNT(DISTINCT c.Id) AS total_courses,
+                           COUNT(DISTINCT s.Id) AS total_students,
+                           COUNT(DISTINCT l.Id) AS total_lectures
+                       FROM tblfaculty f
+                       LEFT JOIN tblcourse c ON f.Id = c.facultyID
+                       LEFT JOIN tblstudents s ON f.facultyCode = s.faculty
+                       LEFT JOIN tbllecture l ON f.facultyCode = l.facultyCode
+                       GROUP BY f.Id";
+
+                            $result = fetch($sql);
+                            if ($result) {
+                                foreach ($result as $row) {
+                                    echo "<tr id='rowfaculty{$row["Id"]}'>";
+                                    echo "<td>" . $row["faculty_code"] . "</td>";
+                                    echo "<td>" . $row["faculty_name"] . "</td>";
+                                    echo "<td>" . $row["total_courses"] . "</td>";
+                                    echo "<td>" . $row["total_students"] . "</td>";
+                                    echo "<td>" . $row["total_lectures"] . "</td>";
+                                    echo "<td>" . $row["date_created"] . "</td>";
+                                    echo "<td><span><i class='ri-delete-bin-line delete' data-id='{$row["Id"]}' data-name='faculty'></i></span></td>";
+                                    echo "</tr>";
+                                }
+                            } else {
+                                echo "<tr><td colspan='6'>No records found</td></tr>";
+                            }
+
+                            ?>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+
+         </div>
+        <div class="formDiv" id="addCourseForm" style="display:none; ">
+
+            <form method="POST" action="" name="addCourse" enctype="multipart/form-data">
+                <div style="display:flex; justify-content:space-around;">
+                    <div class="form-title">
+                        <p>Add Course</p>
+                    </div>
+                    <div>
+                        <span class="close">&times;</span>
+                    </div>
+                </div>
+
+                <input type="text" name="courseName" placeholder="Course Name" required>
+                <input type="text" name="courseCode" placeholder="Course Code" required>
+
+
+                <select required name="faculty">
+                    <option value="" selected>Select Faculty</option>
+                    <?php
+                    $facultyNames = getFacultyNames();
+                    foreach ($facultyNames as $faculty) {
+                        echo '<option value="' . $faculty["Id"] . '">' . $faculty["facultyName"] . '</option>';
+                    }
+                    ?>
+                </select>
+
+                <input type="submit" class="submit" value="Save Course" name="addCourse">
+            </form>
+        </div>
+
+        <div class="formDiv" id="addUnitForm" style="display:none; ">
+            <form method="POST" action="" name="addUnit" enctype="multipart/form-data">
+                <div style="display:flex; justify-content:space-around;">
+                    <div class="form-title">
+                        <p>Add Unit</p>
+                    </div>
+                    <div>
+                        <span class="close">&times;</span>
+                    </div>
+                </div>
+
+                <input type="text" name="unitName" placeholder="Unit Name" required>
+                <input type="text" name="unitCode" placeholder="Unit Code" required>
+
+                <select required name="lecture">
+                    <option value="" selected>Assign Lecture</option>
+                    <?php
+                    $lectureNames = getLectureNames();
+                    foreach ($lectureNames as $lecture) {
+                        echo '<option value="' . $lecture["Id"] . '">' . $lecture["firstName"] . ' ' . $lecture["lastName"]  .  '</option>';
+                    }
+                    ?>
+                </select>
+                <select required name="course">
+                    <option value="" selected>Select Course</option>
+                    <?php
+                    $courseNames = getCourseNames();
+                    foreach ($courseNames as $course) {
+                        echo '<option value="' . $course["Id"] . '">' . $course["name"] . '</option>';
+                    }
+                    ?>
+                </select>
+
+                <input type="submit" class="submit" value="Save Unit" name="addUnit">
+            </form>
+        </div>
+
+        <div class="formDiv" id="addFacultyForm" style="display:none; ">
+            <form method="POST" action="" name="addFaculty" enctype="multipart/form-data">
+                <div style="display:flex; justify-content:space-around;">
+                    <div class="form-title">
+                        <p>Add Faculty</p>
+                    </div>
+                    <div>
+                        <span class="close">&times;</span>
+                    </div>
+                </div>
+                <input type="text" name="facultyName" placeholder="Faculty Name" required>
+                <input type="text" name="facultyCode" placeholder="Faculty Code" required>
+                <input type="submit" class="submit" value="Save Faculty" name="addFaculty">
+            </form>
+        </div>
+
+
+
+    </section>
+
+    <?php js_asset(["delete_request", "addCourse", "active_link"]) ?>
 </body>
 
 </html>

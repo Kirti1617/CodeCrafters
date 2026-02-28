@@ -65,7 +65,7 @@ if (isset($_POST["addLecture"])) {
 </head>
 
 <body>
-<?php include "Includes/topbar.php"; ?>
+    <?php include "Includes/topbar.php"; ?>
 
     <section class=main>
 
