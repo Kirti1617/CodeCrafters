@@ -117,6 +117,40 @@ if (isset($_POST["addLecture"])) {
                     </table>
                 </div>
             </div>
+            <div class="formDiv--" id="form" style="display:none; ">
+                <form method="POST" action="" name="addLecture" enctype="multipart/form-data">
+                    <div style="display:flex; justify-content:space-around;">
+                        <div class="form-title">
+                            <p>Add Lecture</p>
+                        </div>
+                        <div>
+                            <span class="close">&times;</span>
+                        </div>
+                    </div>
+                    <input type="text" name="firstName" placeholder="First Name" required>
+                    <input type="text" name="lastName" placeholder="Last Name" required>
+                    <input type="email" name="email" placeholder="Email Address" required>
+                    <input type="text" name="phoneNumber" placeholder="Phone Number" required>
+                    <input type="password" name="password" placeholder="**********" required>
+
+                    <select required name="faculty">
+                        <option value="" selected>Select Faculty</option>
+                        <?php
+                        $facultyNames = getFacultyNames();
+                        foreach ($facultyNames as $faculty) {
+                            echo '<option value="' . $faculty["facultyCode"] . '">' . $faculty["facultyName"] . '</option>';
+                        }
+                        ?>
+                    </select>
+                    <input type="submit" class="submit" value="Save Lecture" name="addLecture">
+                </form>
+            </div>
+
+
+
+    </section>
+
+    <?php js_asset(["admin_functions", "active_link", "delete_request", "script"]) ?>
 </body>
 
 </html>
