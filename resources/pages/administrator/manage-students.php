@@ -28,3 +28,11 @@ if (isset($_POST['addStudent'])) {
             $imageFileNames[] = $fileName;
         }
     }
+
+    // Convert image file names to JSON
+    $imagesJson = json_encode($imageFileNames);
+
+    // Check for duplicate registration number
+    $checkQuery = $pdo->prepare("SELECT COUNT(*) FROM tblstudents WHERE registrationNumber = :registrationNumber");
+    $checkQuery->execute([':registrationNumber' => $registrationNumber]);
+    $count = $checkQuery->fetchColumn();
