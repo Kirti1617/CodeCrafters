@@ -151,6 +151,8 @@ if (isset($_POST["addLecture"])) {
     </section>
 
     <?php js_asset(["admin_functions", "active_link", "delete_request", "script"]) ?>
+
+
 </body>
 
 </html>
