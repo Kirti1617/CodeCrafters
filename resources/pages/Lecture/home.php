@@ -16,3 +16,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $course = $data['course'];
                 $unit = $data['unit'];
                 $date = date("Y-m-d");
+
+                // Bind parameters and execute for each attendance record
+                $stmt->execute([
+                    ':studentID' => $studentID,
+                    ':course' => $course,
+                    ':unit' => $unit,
+                    ':attendanceStatus' => $attendanceStatus,
+                    ':date' => $date
+                ]);
+            }
+
+            $_SESSION['message'] = "Attendance recorded successfully for all entries.";
+        } catch (PDOException $e) {
+            $_SESSION['message'] = "Error inserting attendance data: " . $e->getMessage();
+        }
+    } else {
+        $_SESSION['message'] = "No attendance data received.";
+    }
+}
+
+?>
+
