@@ -47,4 +47,21 @@ if (isset($_POST['addStudent'])) {
         VALUES 
         (:firstName, :lastName, :email, :registrationNumber, :faculty, :courseCode, :studentImage, :dateRegistered)
     ");
-    
+
+       $insertQuery->execute([
+            ':firstName' => $firstName,
+            ':lastName' => $lastName,
+            ':email' => $email,
+            ':registrationNumber' => $registrationNumber,
+            ':faculty' => $faculty,
+            ':courseCode' => $courseCode,
+            ':studentImage' => $imagesJson, // Store JSON array of image file names
+            ':dateRegistered' => $dateRegistered
+        ]);
+
+        $_SESSION['message'] = "Student: $registrationNumber added successfully!";
+    }
+}
+
+
+
