@@ -26,3 +26,22 @@ function updateTable() {
       }
     }
   };
+  xhr.send(
+    "courseID=" +
+      encodeURIComponent(selectedCourseID) +
+      "&unitID=" +
+      encodeURIComponent(selectedUnitCode) +
+      "&venueID=" +
+      encodeURIComponent(selectedVenue)
+  );
+}
+
+function markAttendance(detectedFaces) {
+  document.querySelectorAll("#studentTableContainer tr").forEach((row) => {
+    const registrationNumber = row.cells[0].innerText.trim();
+    if (detectedFaces.includes(registrationNumber)) {
+      row.cells[5].innerText = "present";
+    }
+  });
+}
+
