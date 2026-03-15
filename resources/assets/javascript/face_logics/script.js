@@ -45,3 +45,30 @@ function markAttendance(detectedFaces) {
   });
 }
 
+function updateOtherElements() {
+  const video = document.getElementById("video");
+  const videoContainer = document.querySelector(".video-container");
+  const startButton = document.getElementById("startButton");
+  let webcamStarted = false;
+  let modelsLoaded = false;
+
+  Promise.all([
+    faceapi.nets.ssdMobilenetv1.loadFromUri("models"),
+    faceapi.nets.faceRecognitionNet.loadFromUri("models"),
+    faceapi.nets.faceLandmark68Net.loadFromUri("models"),
+  ])
+    .then(() => {
+      modelsLoaded = true;
+      console.log("models loaded successfully");
+    })
+    .catch(() => {
+      alert("models not loaded, please check your model folder location");
+    });
+  startButton.addEventListener("click", async () => {
+    videoContainer.style.display = "flex";
+    if (!webcamStarted && modelsLoaded) {
+      startWebcam();
+      webcamStarted = true;
+    }
+  });
+
