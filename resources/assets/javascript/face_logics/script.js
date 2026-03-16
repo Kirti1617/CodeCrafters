@@ -72,3 +72,43 @@ function updateOtherElements() {
     }
   });
 
+function startWebcam() {
+    navigator.mediaDevices
+      .getUserMedia({
+        video: true,
+        audio: false,
+      })
+      .then((stream) => {
+        video.srcObject = stream;
+        videoStream = stream;
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }
+  async function getLabeledFaceDescriptions() {
+    const labeledDescriptors = [];
+
+    for (const label of labels) {
+      const descriptions = [];
+
+      for (let i = 1; i <= 5; i++) {
+        try {
+          const img = await faceapi.fetchImage(
+            `resources/labels/${label}/${i}.png`
+          );
+          const detections = await faceapi
+            .detectSingleFace(img)
+            .withFaceLandmarks()
+            .withFaceDescriptor();
+
+          if (detections) {
+            descriptions.push(detections.descriptor);
+          } else {
+            console.log(`No face detected in ${label}/${i}.png`);
+          }
+        } catch (error) {
+          console.error(`Error processing ${label}/${i}.png:`, error);
+        }
+      }
+
