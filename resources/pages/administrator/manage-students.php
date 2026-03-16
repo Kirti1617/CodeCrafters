@@ -48,3 +48,49 @@ if (isset($_POST['addStudent'])) {
         (:firstName, :lastName, :email, :registrationNumber, :faculty, :courseCode, :studentImage, :dateRegistered)
     ");
 
+
+    if ($count > 0) {
+        $_SESSION['message'] = "Student with the given Registration No: $registrationNumber already exists!";
+    } else {
+        // Insert new student with images stored as JSON
+        $insertQuery = $pdo->prepare("
+        INSERT INTO tblstudents 
+        (firstName, lastName, email, registrationNumber, faculty, courseCode, studentImage, dateRegistered) 
+        VALUES 
+        (:firstName, :lastName, :email, :registrationNumber, :faculty, :courseCode, :studentImage, :dateRegistered)
+    ");
+
+       $insertQuery->execute([
+            ':firstName' => $firstName,
+            ':lastName' => $lastName,
+            ':email' => $email,
+            ':registrationNumber' => $registrationNumber,
+            ':faculty' => $faculty,
+            ':courseCode' => $courseCode,
+            ':studentImage' => $imagesJson, // Store JSON array of image file names
+            ':dateRegistered' => $dateRegistered
+        ]);
+
+        $_SESSION['message'] = "Student: $registrationNumber added successfully!";
+    }
+}
+
+
+
+?>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="resources/images/logo/attnlg.png" rel="icon">
+    <title>AMS - Dashboard</title>
+    <link rel="stylesheet" href="resources/assets/css/admin_styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.2.0/remixicon.css" rel="stylesheet">
+</head>
+
+<body>
+
+</body>
+</html>
