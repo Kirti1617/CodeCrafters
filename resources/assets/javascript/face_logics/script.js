@@ -112,3 +112,51 @@ function startWebcam() {
         }
       }
 
+if (descriptions.length > 0) {
+        detectedFaces.push(label);
+        labeledDescriptors.push(
+          new faceapi.LabeledFaceDescriptors(label, descriptions)
+        );
+      }
+    }
+
+    return labeledDescriptors;
+  }
+
+  video.addEventListener("play", async () => {
+    const labeledFaceDescriptors = await getLabeledFaceDescriptions();
+    const faceMatcher = new faceapi.FaceMatcher(labeledFaceDescriptors);
+
+    const canvas = faceapi.createCanvasFromMedia(video);
+    videoContainer.appendChild(canvas);
+
+    const displaySize = { width: video.width, height: video.height };
+    faceapi.matchDimensions(canvas, displaySize);
+
+    setInterval(async () => {
+      const detections = await faceapi
+        .detectAllFaces(video)
+        .withFaceLandmarks()
+        .withFaceDescriptors();
+
+      const resizedDetections = faceapi.resizeResults(detections, displaySize);
+
+      canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
+
+      const results = resizedDetections.map((d) => {
+        return faceMatcher.findBestMatch(d.descriptor);
+      });
+      detectedFaces = results.map((result) => result.label);
+      markAttendance(detectedFaces);
+
+      results.forEach((result, i) => {
+        const box = resizedDetections[i].detection.box;
+        const drawBox = new faceapi.draw.DrawBox(box, {
+          label: result,
+        });
+        drawBox.draw(canvas);
+      });
+    }, 100);
+  });
+}
+
