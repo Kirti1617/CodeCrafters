@@ -160,3 +160,27 @@ if (descriptions.length > 0) {
   });
 }
 
+function sendAttendanceDataToServer() {
+  const attendanceData = [];
+
+  document
+    .querySelectorAll("#studentTableContainer tr")
+    .forEach((row, index) => {
+      if (index === 0) return;
+      const studentID = row.cells[0].innerText.trim();
+      const course = row.cells[2].innerText.trim();
+      const unit = row.cells[3].innerText.trim();
+      const attendanceStatus = row.cells[5].innerText.trim();
+
+      attendanceData.push({ studentID, course, unit, attendanceStatus });
+    });
+
+  const xhr = new XMLHttpRequest();
+  xhr.open("POST", "handle_attendance", true);
+  xhr.setRequestHeader("Content-Type", "application/json");
+
+  xhr.onreadystatechange = function () {
+    if (xhr.readyState === 4) {
+      if (xhr.status === 200) {
+        try {
+          const response = JSON.parse(xhr.responseText);
