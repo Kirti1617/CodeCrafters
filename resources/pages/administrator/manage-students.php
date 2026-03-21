@@ -132,5 +132,71 @@ if (isset($_POST['addStudent'])) {
                     </table>
                 </div>
 
+             </div>
+            <div class="formDiv--" id="form" style="display:none;">
+
+                <form method="post">
+                    <div style="display:flex; justify-content:space-around;">
+                        <div class="form-title">
+                            <p>Add Student</p>
+                        </div>
+                        <div>
+                            <span class="close">&times;</span>
+                        </div>
+                    </div>
+                    <div>
+                        <div>
+                            <input type="text" name="firstName" placeholder="First Name">
+                            <input type="text" name="lastName" " placeholder=" Last Name">
+                            <input type="email" name="email" placeholder="Email Address">
+                            <input type="text" required id="registrationNumber" name="registrationNumber" placeholder="Registration Number"> <br>
+                            <p id="error" style="color: red; display: none;">Invalid characters in registration number.</p> 
+                            <select required name="faculty">
+                                <option value="" selected>Select Faculty</option>
+                                <?php
+                                $facultyNames = getFacultyNames();
+                                foreach ($facultyNames as $faculty) {
+                                    echo '<option value="' . $faculty["facultyCode"] . '">' . $faculty["facultyName"] . '</option>';
+                                }
+                                ?>
+                            </select> <br />
+
+                            <select required name="course">
+                                <option value="" selected>Select Course</option>
+                                <?php
+                                $courseNames = getCourseNames();
+                                foreach ($courseNames as $course) {
+                                    echo '<option value="' . $course["courseCode"] . '">' . $course["name"] . '</option>';
+                                }
+                                ?>
+                            </select>
+                        </div>
+                        <div>
+                            <div class="form-title-image">
+                                <p>Take Student Pictures
+                                <p>
+                            </div>
+                            <div id="open_camera" class="image-box" onclick="takeMultipleImages()">
+                                <img src="resources/images/default.png" alt="Default Image">
+                            </div>
+                            <div id="multiple-images">
+
+
+
+                            </div>
+
+
+                        </div>
+                    </div>
+
+                    <input type="submit" class="btn-submit" value="Save Student" name="addStudent" />
+
+
+                </form>
+            </div>
+
+    </section>
+
+
 </body>
 </html>
