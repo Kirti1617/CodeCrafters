@@ -184,3 +184,39 @@ function sendAttendanceDataToServer() {
       if (xhr.status === 200) {
         try {
           const response = JSON.parse(xhr.responseText);
+
+          if (response.status === "success") {
+            showMessage(
+              response.message || "Attendance recorded successfully."
+            );
+          } else {
+            showMessage(
+              response.message ||
+                "An error occurred while recording attendance."
+            );
+          }
+        } catch (e) {
+          showMessage("Error: Failed to parse the response from the server.");
+          console.error(e);
+        }
+      } else {
+        showMessage(
+          "Error: Unable to record attendance. HTTP Status: " + xhr.status
+        );
+        console.error("HTTP Error", xhr.status, xhr.statusText);
+      }
+    }
+  };
+
+  xhr.send(JSON.stringify(attendanceData));
+}
+function showMessage(message) {
+  var messageDiv = document.getElementById("messageDiv");
+  messageDiv.style.display = "block";
+  messageDiv.innerHTML = message;
+  console.log(message);
+  messageDiv.style.opacity = 1;
+  setTimeout(function () {
+    messageDiv.style.opacity = 0;
+  }, 5000);
+}
