@@ -220,3 +220,22 @@ function showMessage(message) {
     messageDiv.style.opacity = 0;
   }, 5000);
 }
+function stopWebcam() {
+  if (videoStream) {
+    const tracks = videoStream.getTracks();
+
+    tracks.forEach((track) => {
+      track.stop();
+    });
+
+    video.srcObject = null;
+    videoStream = null;
+  }
+}
+
+document.getElementById("endAttendance").addEventListener("click", function () {
+  sendAttendanceDataToServer();
+  const videoContainer = document.querySelector(".video-container");
+  videoContainer.style.display = "none";
+  stopWebcam();
+});
