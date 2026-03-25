@@ -49,8 +49,20 @@
                             <i class="ri-file-text-line card--icon--lg"></i>
                         </div>
 
+            </div>
+
+            <div class="card card-1">
+
+                        <div class="card--data">
+                            <div class="card--content">
+                                <h5 class="card--title">Registered Lectures</h5>
+                                <h1><?php total_rows('tbllecture') ?></h1>
+                            </div>
+                            <i class="ri-user-line card--icon--lg"></i>
+                        </div>
+
                     </div>
-                    </div>
+                </div>
             </div>
 
             <div class="table-container">
