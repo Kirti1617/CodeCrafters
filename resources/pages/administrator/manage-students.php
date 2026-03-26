@@ -234,6 +234,29 @@ if (isset($_POST['addStudent'])) {
             registrationNumberInput.value = sanitizedValue; 
         });
     </script> 
+    <?php js_asset(["admin_functions", "delete_request", "script", "active_link"]) ?>
+
+    <script>
+        const registrationNumberInput = document.getElementById('registrationNumber');
+        const errorMessage = document.getElementById('error');
+
+        const invalidCharacters = /[\\/:*?"<>|]/g;
+
+        registrationNumberInput.addEventListener('input', () => {
+            const originalValue = registrationNumberInput.value;
+
+            const sanitizedValue = originalValue.replace(invalidCharacters, '');
+
+            if (originalValue !== sanitizedValue) {
+                errorMessage.style.display = 'inline';
+                errorMessage.textContent = 'Invalid characters removed.';
+            } else {
+                errorMessage.style.display = 'none';
+            }
+
+            registrationNumberInput.value = sanitizedValue; 
+        });
+    </script>
 </body>
 
 </html>
