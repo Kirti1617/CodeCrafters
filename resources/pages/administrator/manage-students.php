@@ -91,6 +91,149 @@ if (isset($_POST['addStudent'])) {
 </head>
 
 <body>
+    <?php include 'includes/topbar.php'; ?>
 
+    <section class=main>
+
+        <?php include "Includes/sidebar.php"; ?>
+
+        <div class="main--content">
+            <div id="overlay"></div>
+            <?php showMessage(); ?>
+            <div class="table-container">
+
+                <div class="title" id="showButton">
+                    <h2 class="section--title">Students</h2>
+                    <button class="add"><i class="ri-add-line"></i>Add Student</button>
+                </div>
+
+                <div class="table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Registration No</th>
+                                <th>Name</th>
+                                <th>Faculty</th>
+                                <th>Course</th>
+                                <th>Email</th>
+                                <th>Settings</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                            $sql = "SELECT * FROM tblstudents";
+                            $result = fetch($sql);
+                            if ($result) {
+                                foreach ($result as $row) {
+                                    echo "<tr id='rowstudents{$row["Id"]}'>";
+                                    echo "<td>" . $row["registrationNumber"] . "</td>";
+                                    echo "<td>" . $row["firstName"] . "</td>";
+                                    echo "<td>" . $row["faculty"] . "</td>";
+                                    echo "<td>" . $row["courseCode"] . "</td>";
+                                    echo "<td>" . $row["email"] . "</td>";
+                                    echo "<td><span><i class='ri-delete-bin-line delete' data-id='{$row["Id"]}' data-name='students'></i></span></td>";
+                                    echo "</tr>";
+                                }
+                            } else {
+                                echo "<tr><td colspan='6'>No records found</td></tr>";
+                            }
+
+                            ?>
+
+                        </tbody>
+                    </table>
+                </div>
+
+             </div>
+            <div class="formDiv--" id="form" style="display:none;">
+
+                <form method="post">
+                    <div style="display:flex; justify-content:space-around;">
+                        <div class="form-title">
+                            <p>Add Student</p>
+                        </div>
+                        <div>
+                            <span class="close">&times;</span>
+                        </div>
+                    </div>
+                    <div>
+                        <div>
+                            <input type="text" name="firstName" placeholder="First Name">
+                            <input type="text" name="lastName" " placeholder=" Last Name">
+                            <input type="email" name="email" placeholder="Email Address">
+                            <input type="text" required id="registrationNumber" name="registrationNumber" placeholder="Registration Number"> <br>
+                            <p id="error" style="color: red; display: none;">Invalid characters in registration number.</p> 
+                            <select required name="faculty">
+                                <option value="" selected>Select Faculty</option>
+                                <?php
+                                $facultyNames = getFacultyNames();
+                                foreach ($facultyNames as $faculty) {
+                                    echo '<option value="' . $faculty["facultyCode"] . '">' . $faculty["facultyName"] . '</option>';
+                                }
+                                ?>
+                            </select> <br />
+
+                            <select required name="course">
+                                <option value="" selected>Select Course</option>
+                                <?php
+                                $courseNames = getCourseNames();
+                                foreach ($courseNames as $course) {
+                                    echo '<option value="' . $course["courseCode"] . '">' . $course["name"] . '</option>';
+                                }
+                                ?>
+                            </select>
+                        </div>
+                        <div>
+                            <div class="form-title-image">
+                                <p>Take Student Pictures
+                                <p>
+                            </div>
+                            <div id="open_camera" class="image-box" onclick="takeMultipleImages()">
+                                <img src="resources/images/default.png" alt="Default Image">
+                            </div>
+                            <div id="multiple-images">
+
+
+
+                            </div>
+
+
+                        </div>
+                    </div>
+
+                    <input type="submit" class="btn-submit" value="Save Student" name="addStudent" />
+
+
+                </form>
+            </div>
+
+    </section>
+
+
+
+   <?php js_asset(["admin_functions", "delete_request", "script", "active_link"]) ?>
+
+    <script>
+        const registrationNumberInput = document.getElementById('registrationNumber');
+        const errorMessage = document.getElementById('error');
+
+        const invalidCharacters = /[\\/:*?"<>|]/g;
+
+        registrationNumberInput.addEventListener('input', () => {
+            const originalValue = registrationNumberInput.value;
+
+            const sanitizedValue = originalValue.replace(invalidCharacters, '');
+
+            if (originalValue !== sanitizedValue) {
+                errorMessage.style.display = 'inline';
+                errorMessage.textContent = 'Invalid characters removed.';
+            } else {
+                errorMessage.style.display = 'none';
+            }
+
+            registrationNumberInput.value = sanitizedValue; 
+        });
+    </script> 
 </body>
+
 </html>

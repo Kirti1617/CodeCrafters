@@ -112,3 +112,133 @@ function startWebcam() {
         }
       }
 
+<<<<<<< HEAD
+=======
+if (descriptions.length > 0) {
+        detectedFaces.push(label);
+        labeledDescriptors.push(
+          new faceapi.LabeledFaceDescriptors(label, descriptions)
+        );
+      }
+    }
+
+    return labeledDescriptors;
+  }
+
+  video.addEventListener("play", async () => {
+    const labeledFaceDescriptors = await getLabeledFaceDescriptions();
+    const faceMatcher = new faceapi.FaceMatcher(labeledFaceDescriptors);
+
+    const canvas = faceapi.createCanvasFromMedia(video);
+    videoContainer.appendChild(canvas);
+
+    const displaySize = { width: video.width, height: video.height };
+    faceapi.matchDimensions(canvas, displaySize);
+
+    setInterval(async () => {
+      const detections = await faceapi
+        .detectAllFaces(video)
+        .withFaceLandmarks()
+        .withFaceDescriptors();
+
+      const resizedDetections = faceapi.resizeResults(detections, displaySize);
+
+      canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
+
+      const results = resizedDetections.map((d) => {
+        return faceMatcher.findBestMatch(d.descriptor);
+      });
+      detectedFaces = results.map((result) => result.label);
+      markAttendance(detectedFaces);
+
+      results.forEach((result, i) => {
+        const box = resizedDetections[i].detection.box;
+        const drawBox = new faceapi.draw.DrawBox(box, {
+          label: result,
+        });
+        drawBox.draw(canvas);
+      });
+    }, 100);
+  });
+}
+
+function sendAttendanceDataToServer() {
+  const attendanceData = [];
+
+  document
+    .querySelectorAll("#studentTableContainer tr")
+    .forEach((row, index) => {
+      if (index === 0) return;
+      const studentID = row.cells[0].innerText.trim();
+      const course = row.cells[2].innerText.trim();
+      const unit = row.cells[3].innerText.trim();
+      const attendanceStatus = row.cells[5].innerText.trim();
+
+      attendanceData.push({ studentID, course, unit, attendanceStatus });
+    });
+
+  const xhr = new XMLHttpRequest();
+  xhr.open("POST", "handle_attendance", true);
+  xhr.setRequestHeader("Content-Type", "application/json");
+
+  xhr.onreadystatechange = function () {
+    if (xhr.readyState === 4) {
+      if (xhr.status === 200) {
+        try {
+          const response = JSON.parse(xhr.responseText);
+
+          if (response.status === "success") {
+            showMessage(
+              response.message || "Attendance recorded successfully."
+            );
+          } else {
+            showMessage(
+              response.message ||
+                "An error occurred while recording attendance."
+            );
+          }
+        } catch (e) {
+          showMessage("Error: Failed to parse the response from the server.");
+          console.error(e);
+        }
+      } else {
+        showMessage(
+          "Error: Unable to record attendance. HTTP Status: " + xhr.status
+        );
+        console.error("HTTP Error", xhr.status, xhr.statusText);
+      }
+    }
+  };
+
+  xhr.send(JSON.stringify(attendanceData));
+}
+function showMessage(message) {
+  var messageDiv = document.getElementById("messageDiv");
+  messageDiv.style.display = "block";
+  messageDiv.innerHTML = message;
+  console.log(message);
+  messageDiv.style.opacity = 1;
+  setTimeout(function () {
+    messageDiv.style.opacity = 0;
+  }, 5000);
+}
+function stopWebcam() {
+  if (videoStream) {
+    const tracks = videoStream.getTracks();
+
+    tracks.forEach((track) => {
+      track.stop();
+    });
+
+    video.srcObject = null;
+    videoStream = null;
+  }
+}
+
+document.getElementById("endAttendance").addEventListener("click", function () {
+  sendAttendanceDataToServer();
+  const videoContainer = document.querySelector(".video-container");
+  videoContainer.style.display = "none";
+  stopWebcam();
+});
+>>>>>>> 1a544691d53ff09505e17a5372559759f76581b7
